@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#f6fff0">
+<meta name="theme-color" content="#8b4056">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="有難いなぁ結構やなぁ">
@@ -385,217 +385,130 @@ function showDailyRecords() {
 
  
 function countUp() {
-
-    // 🎯 前回の回数を保存
     const previousCount = count;
-
-    // 今日のカウント
     count++;
-
     document.getElementById("count").textContent = count;
 
-
-    // ⭐️ 累計
-    let total = Number(
-        localStorage.getItem("arigataiTotal") || 0
-    );
-
+    let total = Number(localStorage.getItem("arigataiTotal") || 0);
     const previousTotal = total;
-
     total++;
 
-    localStorage.setItem(
-        "arigataiTotal",
-        total
-    );
-
+    localStorage.setItem("arigataiTotal", total);
     document.getElementById("total").textContent =
-        "⭐️ 累計：" + total + "回";
+        "⭐️ 累計：" + total.toLocaleString() + "回";
 
-
-    // 📅 今日の日別記録
-    const today = new Date()
-        .toLocaleDateString("ja-JP");
-
+    const today = new Date().toLocaleDateString("ja-JP");
     let dailyRecords = JSON.parse(
         localStorage.getItem("arigataiDailyRecords") || "{}"
     );
-
-    dailyRecords[today] =
-        Number(dailyRecords[today] || 0) + 1;
-
+    dailyRecords[today] = Number(dailyRecords[today] || 0) + 1;
     localStorage.setItem(
         "arigataiDailyRecords",
         JSON.stringify(dailyRecords)
     );
 
-
-    // =====================================
-    // 🌱 今日100回達成
-    // =====================================
-
-    if (previousCount < 100 && count >= 100) {
-
-        const comments100 = [
-            "🎉 100回達成！感謝の心が積み重なっています！",
-            "🍀 おめでとう！100回クリア！",
-            "😊 おおっ、100回！いい感じです！",
-            "🌱 今日の喜びが育っていますね！",
-            "✨ 100回いただきました！",
-            "🎊 祝・100回！ありがたい一日ですね！",
-            "😆 100回！素晴らしい積み重ねです！",
-            "🍀 小さな積み重ねが、100回に！",
-            "🎯 本日の第一目標、クリア！",
-            "🌈 100回達成！この調子でいきましょう！"
-        ];
-
-        const randomComment =
-            comments100[
-                Math.floor(
-                    Math.random() * comments100.length
-                )
-            ];
-
-        document.getElementById("status").textContent =
-            randomComment;
+    // 達成時のコメントは、節目ごとに数種類から選びます。
+    function celebrate(comments) {
+        const message = comments[Math.floor(Math.random() * comments.length)];
+        document.getElementById("status").textContent = message;
     }
 
+    // 🌱 今日の達成
+    const dailyMilestones = [
+        {
+            value: 100,
+            comments: [
+                "🌱 今日100回！感謝の種まき、いいスタートですね。",
+                "🍀 100回達成！小さな喜びが積み重なっています。",
+                "😊 有難いなぁ、結構やなぁ。まずは100回、おめでとう！",
+                "✨ 100回！今日の心に、明るい風が吹いていますね。"
+            ]
+        },
+        {
+            value: 300,
+            comments: [
+                "🌼 300回達成！喜びの輪が広がっていますね。",
+                "🍀 300回！その調子、その調子。今日も結構やなぁ！",
+                "👏 300回到達！感謝の言葉が暮らしに根づいています。",
+                "😊 300回！ありがたいことを見つける名人ですね。"
+            ]
+        },
+        {
+            value: 500,
+            comments: [
+                "🎉 今日500回！よく積み重ねましたね。",
+                "🌸 500回達成！明るい心が花開いています。",
+                "🍀 500回！有難いなぁ、結構やなぁ。いい響きですね。",
+                "👏 500回到達！今日の喜び、まだまだ育ちそうです。"
+            ]
+        },
+        {
+            value: 1000,
+            comments: [
+                "🎊 今日1,000回！感謝の心をたっぷり味わいましたね。",
+                "🌈 1,000回達成！今日という日が、ますます結構ですね。",
+                "🍀 1,000回！一言一言の積み重ね、お見事です。",
+                "😊 祝・1,000回！明るい心で、今日も一日楽しみましょう。"
+            ]
+        }
+    ];
 
-    // =====================================
-    // 🎉 今日500回達成
-    // =====================================
-
-    if (previousCount < 500 && count >= 500) {
-
-        const comments500 = [
-            "🎊 500回達成！かなり有難いなぁ！",
-            "🍀 500回！今日の有難いなぁ、結構やなぁパワー全開！",
-            "🎉 500回クリア！ここまで来ましたね！",
-            "🌈 500回の有難いなぁ、結構やなぁ素晴らしい！",
-            "⭐️ 祝・500回！今日はかなり有難いなぁ、結構やなぁ日！",
-            "😆 500回言った人、やっぱり有難いなぁ、結構やなぁ",
-            "🔥 500回突破！有難いなぁ、結構やなぁが止まりません！",
-            "👏 500回達成！お見事です！"
-        ];
-
-        const randomComment =
-            comments500[
-                Math.floor(
-                    Math.random() * comments500.length
-                )
-            ];
-
-        document.getElementById("status").textContent =
-            randomComment;
+    for (const milestone of dailyMilestones) {
+        if (previousCount < milestone.value && count >= milestone.value) {
+            celebrate(milestone.comments);
+        }
     }
 
+    // ⭐ 累計の達成
+    const totalMilestones = [
+        {
+            value: 1000,
+            comments: [
+                "⭐ 累計1,000回！ここまで続けた自分に、ありがとう。",
+                "🍀 累計1,000回達成！感謝の積み重ね、素晴らしいですね。",
+                "🌱 1,000回の節目。これからも一歩ずつ、楽しく！"
+            ]
+        },
+        {
+            value: 5000,
+            comments: [
+                "🌸 累計5,000回！有難いなぁ、結構やなぁの輪が広がっています。",
+                "🎉 5,000回達成！続ける力が、喜びになっていますね。",
+                "🍀 累計5,000回。日々の小さな感謝が大きな実りに！"
+            ]
+        },
+        {
+            value: 10000,
+            comments: [
+                "🎊 累計10,000回達成！一万回分の感謝、結構なことですね。",
+                "🌈 祝・10,000回！明るい心の積み重ね、お見事です！",
+                "🍀 累計一万回！これからも有難いことを見つけていきましょう。"
+            ]
+        },
+        {
+            value: 50000,
+            comments: [
+                "🌟 累計50,000回！大きな節目ですね。おめでとうございます！",
+                "🎉 5万回達成！日々の積み重ねが、こんなに大きくなりました。",
+                "🍀 累計50,000回。感謝の心を育て続けてきましたね！"
+            ]
+        },
+        {
+            value: 100000,
+            comments: [
+                "👑 累計100,000回！十万回の感謝、本当におめでとうございます！",
+                "🎊 祝・10万回！一日一日の積み重ねが大きな宝物になりました。",
+                "🌸 累計100,000回達成！これからも明るく、楽しく、ありがたく！"
+            ]
+        }
+    ];
 
-    // =====================================
-    // 🎊 今日1,000回達成
-    // =====================================
-
-    if (previousCount < 1000 && count >= 1000) {
-
-        const comments1000 = [
-            "🎊✨ 1,000回達成！今日の有難いなぁ、結構やなぁ、絶好調！",
-            "🍀🎉 祝・1,000回！有難いなぁ、結構やなぁパワー全開！",
-            "🌈⭐️ 1,000回クリア！今日もたっぷり有難いなぁ、結構やなぁ",
-            "👏🍀 1,000回！これは立派な有難いなぁ、結構やなぁです！",
-            "🔥🎉 1,000回突破！有難いなぁ、結構やなぁが止まりません！",
-            "✨🌱 1,000回達成！今日の有難いなぁ、結構やなぁ、育ちました！",
-            "🎊😆 1,000回！ここまで来るとは、やっぱり有難いなぁ、結構やなぁ",
-            "⭐️🍀 1,000回達成！素晴らしい一日です！"
-        ];
-
-        const randomComment =
-            comments1000[
-                Math.floor(
-                    Math.random() * comments1000.length
-                )
-            ];
-
-        document.getElementById("status").textContent =
-            randomComment;
-    }
-
-
-    // =====================================
-    // ⭐️ 累計1万回ごとの達成
-    // =====================================
-
-    const previousTenThousand =
-        Math.floor(previousTotal / 10000);
-
-    const currentTenThousand =
-        Math.floor(total / 10000);
-
-
-    if (currentTenThousand > previousTenThousand) {
-
-        const milestone =
-            currentTenThousand * 10000;
-
-        const comments10000 = [
-            "🎊✨ 累計" + milestone.toLocaleString() + "回達成！有難いなぁ、結構やなぁの積み重ねです！",
-            "🍀⭐️ 累計" + milestone.toLocaleString() + "回！ここまで有難いなぁ、結構やなぁを続けました！",
-            "🎉🌈 累計" + milestone.toLocaleString() + "回達成！素晴らしい有難いなぁ、結構やなぁです！",
-            "✨🍀 累計" + milestone.toLocaleString() + "回！有難いなぁ、結構やなぁパワー上昇中！",
-            "👏🎊 累計" + milestone.toLocaleString() + "回達成！これはすごい！",
-            "⭐️🍀 累計" + milestone.toLocaleString() + "回！有難いなぁ、結構やなぁの積み重ねですね！"
-        ];
-
-        const randomComment =
-            comments10000[
-                Math.floor(
-                    Math.random() * comments10000.length
-                )
-            ];
-
-        document.getElementById("status").textContent =
-            randomComment;
-    }
-
-
-    // =====================================
-    // 👑 累計10万回ごとの超特別達成
-    // =====================================
-
-    const previousHundredThousand =
-        Math.floor(previousTotal / 100000);
-
-    const currentHundredThousand =
-        Math.floor(total / 100000);
-
-
-    if (currentHundredThousand > previousHundredThousand) {
-
-        const milestone =
-            currentHundredThousand * 100000;
-
-        const comments100000 = [
-            "👑🎊✨ 累計" + milestone.toLocaleString() + "回達成！超・有難いなぁ、結構やなぁです！！",
-            "🌈👑 累計" + milestone.toLocaleString() + "回！ここまで来ましたか！お見事です！！",
-            "🎉🍀👑 累計" + milestone.toLocaleString() + "回達成！有難いなぁ、結構やなぁパワー全開です！！",
-            "⭐️✨🎊 累計" + milestone.toLocaleString() + "回！記念すべき有難いなぁ、結構やなぁです！！",
-            "🔥🍀👑 累計" + milestone.toLocaleString() + "回突破！有難いなぁ、結構やなぁが大爆発！！",
-            "🎊🌟👑 累計" + milestone.toLocaleString() + "回達成！本当におめでとうございます！！"
-        ];
-
-        const randomComment =
-            comments100000[
-                Math.floor(
-                    Math.random() * comments100000.length
-                )
-            ];
-
-        document.getElementById("status").textContent =
-            randomComment;
+    for (const milestone of totalMilestones) {
+        if (previousTotal < milestone.value && total >= milestone.value) {
+            celebrate(milestone.comments);
+        }
     }
 }
-
-
-
-
 
 /* =========================
    リセット
@@ -632,13 +545,17 @@ function sayTuiteru() {
 ========================= */
 
 function countTuiteru(text) {
-    // 2つの言葉がそろって1組としてカウント
-    const normalized = text
-        .replace(/[！!。、，,？?]/g, "").replace(/\s/g, "")
+    // 音声テストで確認した「ありがたいな、結構やな」の繰り返しに対応
+    const normalized = String(text)
+        .replace(/[！!。、，,？?]/g, "")
+        .replace(/[\s　]/g, "")
         .replace(/ありがたい/g, "有難い")
         .replace(/けっこう/g, "結構");
-    const thanks = normalized.match(/有難い(?:なぁ|なあ|なー|です)?/g) || [];
-    const good = normalized.match(/結構(?:やなぁ|やなあ|やなー|ですね|なぁ|なあ)?/g) || [];
+
+    const thanks = normalized.match(/有難い(?:なぁ|なあ|なー|な|です)?/g) || [];
+    const good = normalized.match(/結構(?:やなぁ|やなあ|やなー|やな|ですね|なぁ|なあ|な)?/g) || [];
+
+    // 両方の言葉がそろった数だけを1組として数える
     return Math.min(thanks.length, good.length);
 }
 
